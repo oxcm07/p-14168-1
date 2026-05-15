@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.stream.Collectors;
@@ -21,6 +22,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PostController {
     private final PostService postService;
+
+    @ModelAttribute("siteName")
+    public String siteName() {
+        return "커뮤니티 사이트 A";
+    }
 
 
     @AllArgsConstructor
@@ -35,14 +41,14 @@ public class PostController {
     }
 
     @GetMapping("/posts/write")
-    public String showWrite(WriteForm form) {
+    public String showWrite(@ModelAttribute("form") WriteForm form) {
         return "post/post/write";
     }
 
     @PostMapping("/posts/doWrite")
     @Transactional
     public String write(
-            @Valid WriteForm form,
+            @ModelAttribute("form") @Valid WriteForm form,
             BindingResult bindingResult,
             Model model
     ) {
