@@ -62,6 +62,18 @@ public class PostController {
         return "redirect:/posts/" + post.getId();
     }
 
+    @DeleteMapping("/posts/{id}/delete")
+    @Transactional
+    public String delete(
+            @PathVariable int id
+    ) {
+        Post post = postService.findById(id).get();
+
+        postService.deletePost(post);
+
+        return "redirect:/posts";
+    }
+
 
     public record WriteForm(
             @NotBlank(message = "01-title-제목을 입력해주세요.")
