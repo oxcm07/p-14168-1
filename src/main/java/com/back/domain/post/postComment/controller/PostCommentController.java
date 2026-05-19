@@ -6,15 +6,11 @@ import com.back.domain.post.postComment.entity.PostComment;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -22,12 +18,11 @@ public class PostCommentController {
     private final PostService postService;
 
 
-    @AllArgsConstructor
-    @Getter
-    public static class ModifyForm {
-        @NotBlank
-        @Size(min = 2, max = 100)
-        private String content;
+    public record ModifyForm(
+            @NotBlank
+            @Size(min = 2, max = 100)
+            String content
+    ) {
     }
 
     @GetMapping("/posts/{postId}/comments/{id}/modify")
@@ -46,7 +41,7 @@ public class PostCommentController {
         return "post/postComment/modify";
     }
 
-    @PostMapping("/posts/{postId}/comments/{id}/modify")
+    @PutMapping("/posts/{postId}/comments/{id}/modify")
     @Transactional
     public String modify(
             @PathVariable int postId,
@@ -56,18 +51,17 @@ public class PostCommentController {
         Post post = postService.findById(postId).get();
         PostComment postComment = post.findCommentById(id).get();
 
-        postService.modifyComment(postComment, modifyForm.getContent());
+        postService.modifyComment(postComment, modifyForm.content);
 
         return "redirect:/posts/" + postId;
     }
 
 
-    @AllArgsConstructor
-    @Getter
-    public static class WriteForm {
-        @NotBlank
-        @Size(min = 2, max = 100)
-        private String content;
+    public record WriteForm(
+            @NotBlank
+            @Size(min = 2, max = 100)
+            String content
+    ) {
     }
 
     @PostMapping("/posts/{postId}/comments/write")
@@ -78,13 +72,13 @@ public class PostCommentController {
     ) {
         Post post = postService.findById(postId).get();
 
-        postService.writeComment(post, writeForm.getContent());
+        postService.writeComment(post, writeForm.content);
 
         return "redirect:/posts/" + postId;
     }
 
 
-    @GetMapping("/posts/{postId}/comments/{id}/delete")
+    @DeleteMapping("/posts/{postId}/comments/{id}/delete")
     @Transactional
     public String delete(
             @PathVariable int postId,
