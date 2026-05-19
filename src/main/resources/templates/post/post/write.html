@@ -1,7 +1,12 @@
 <html layout:decorate="~{layout}">
 
+<head>
+    <title>글 작성</title>
+</head>
+
 <div layout:fragment="content">
-    <form method="POST" th:object="${form}">
+
+    <form method="POST" th:action th:object="${form}">
         <div th:replace="~{form_errors :: formErrorsFragment}"></div>
 
         <div>
@@ -14,6 +19,6 @@
         </div>
         <input type="submit" value="작성">
     </form>
-</div>
 
+</div>
 </html>

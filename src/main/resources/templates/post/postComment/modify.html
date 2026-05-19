@@ -1,6 +1,11 @@
 <html layout:decorate="~{layout}">
 
+<head>
+    <title th:text="|${postComment.id}번 댓글 수정 - ${post.title}|"></title>
+</head>
+
 <div layout:fragment="content">
+
     <script>
         function PostComment__submitModifyForm(form) {
             form.content.value = form.content.value.trim();
@@ -21,7 +26,7 @@
         }
     </script>
 
-    <form method="POST" onsubmit="PostComment__submitModifyForm(this); return false;">
+    <form method="POST" th:action onsubmit="PostComment__submitModifyForm(this); return false;">
         <input type="hidden" name="_method" value="PUT">
 
         <div>
@@ -77,6 +82,6 @@
         <a th:href="@{/posts/{id}(id=${post.id})}">글 상세페이지</a>
         <a href="/posts">글 목록</a>
     </div>
-</div>
 
+</div>
 </html>
